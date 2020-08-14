@@ -18,6 +18,8 @@ var Rows;
 var looping = true;
 var animating = false
 
+document.addEventListener('contextmenu', event => event.preventDefault());
+
 function setup() {
     createCanvas(1000, 560)
 
@@ -135,16 +137,30 @@ function draw() {
 }
 
 function mouseDragged() {
-    if (looping) {
-        drawObstacles()
+    if (!looping) return;
+    if (mouseButton === LEFT) {
+        drawObstacles();
+    } else if (mouseButton === RIGHT) {
+        drawObstacles(true)
     }
 }
 
-function drawObstacles() {
+function mouseClicked() {
+    console.log(mouseButton)
+    if (!looping) return;
+    if (mouseButton === LEFT) {
+        drawObstacles();
+    } else if (mouseButton === RIGHT) {
+        drawObstacles(true)
+    }
+}
+
+
+function drawObstacles(deleteWall = false) {
     for (let i = 0; i < gridArray.length; i++) {
         for (let j = 0; j < gridArray[i].length; j++) {
             if (gridArray[i][j].contains(mouseX, mouseY) && !gridArray[i][j].isStart && !gridArray[i][j].isTarget) {
-                gridArray[i][j].isObstacle = true;
+                gridArray[i][j].isObstacle = !deleteWall;
             }
         }
     }
